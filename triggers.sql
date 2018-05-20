@@ -1,9 +1,9 @@
-set search_path to ep;
+set search_path to mac0439; --Altere essa linha - Para mudar o Schema utilizado
 
 -- Cria Marcável e Avaliável para usuário --
 CREATE OR REPLACE FUNCTION InsereMarcavelAvaliavel()
 RETURNS TRIGGER AS $$
-DECLARE 
+DECLARE
    tipao TEXT;
 BEGIN
    tipao = TG_ARGV[0];
@@ -30,7 +30,7 @@ CREATE OR REPLACE FUNCTION DeleteMarcavelAvaliavel()
 RETURNS TRIGGER AS $$
 BEGIN
    DELETE FROM marcavel r1 WHERE r1.id = OLD.id_marcavel;
-   DELETE FROM avaliavel r2 WHERE r2.id = OLD.id_avaliavel; 
+   DELETE FROM avaliavel r2 WHERE r2.id = OLD.id_avaliavel;
    RETURN NEW;
 END;
 $$ LANGUAGE plpgsql;
@@ -79,7 +79,7 @@ EXECUTE PROCEDURE CriaStatusDoacao();
 -- Cria Avaliável para Anúncio --
 CREATE OR REPLACE FUNCTION InsereAvaliavel()
 RETURNS TRIGGER AS $$
-DECLARE 
+DECLARE
    tipao TEXT;
 BEGIN
    tipao = TG_ARGV[0];

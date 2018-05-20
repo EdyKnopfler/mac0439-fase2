@@ -1,4 +1,7 @@
-﻿create table marcavel (
+create schema mac0439; --Altere essa linha - Para mudar o Schema utilizado
+set search_path to mac0439; --Altere essa linha - Para mudar o Schema utilizado
+
+create table marcavel (
 	id SERIAL,
 	tipo VARCHAR(12) CHECK (tipo = 'Usuario' OR tipo = 'Pet'),
 	primary key(id)
@@ -27,7 +30,7 @@ create table usuario (
 	primary key(email),
 	foreign key(id_marcavel) references marcavel(id) ON DELETE CASCADE ON UPDATE CASCADE,
 	foreign key(id_avaliavel) references avaliavel(id) ON DELETE CASCADE ON UPDATE CASCADE
-	
+
 );
 
 create table pessoa_fisica (
