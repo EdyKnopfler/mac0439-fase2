@@ -1,3 +1,5 @@
+set search_path to mac0439; --Altere essa linha - Para mudar o Schema utilizado
+
 drop table if exists "pessoa_fisica" cascade;
 drop table if exists "pessoa_juridica" cascade;
 drop table if exists "foto" cascade;
