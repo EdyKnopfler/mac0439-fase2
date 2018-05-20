@@ -1,6 +1,6 @@
 import psycopg2
 
-opcoes = "dbname='' user='' host='linux.ime.usp.br' password='' port='5432'" #Altere essa linha - Para alterar o DB que sera acessado
+opcoes = "dbname='' user='' host='linux.ime.usp.br' password='' port='5432'" #Altere essa linha! - Para alterar o DB que sera acessado
 conexao = psycopg2.connect(opcoes)
 cursor = conexao.cursor()
 

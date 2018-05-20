@@ -1,16 +1,11 @@
 import psycopg2, datetime, insercao_mongo_exemplos
 
-opcoes = "dbname='' user='' host='linux.ime.usp.br' password='' port='5432'" #Altere essa linha - Para alterar o DB que sera acessado
+opcoes = "dbname='' user='' host='linux.ime.usp.br' password='' port='5432'" #Altere essa linha! - Para alterar o DB que sera acessado
 conexao = psycopg2.connect(opcoes)
 cursor = conexao.cursor()
 cursor.execute("SET search_path TO mac0439") #Altere essa linha - Para mudar o Schema utilizado
 
 # Doador
-#cursor.execute("INSERT INTO marcavel (tipo) VALUES (%s) RETURNING id", ('Usuario',))
-#idMarcavelDoador = cursor.fetchone()[0]
-
-#cursor.execute("INSERT INTO avaliavel (tipo) VALUES (%s) RETURNING id", ('Usuario',))
-#idAvaliavelDoador = cursor.fetchone()[0]
 
 emailDoador = 'doador@mac0439.com'
 
@@ -28,11 +23,6 @@ cursor.execute("""
 
 
 # Pet
-#cursor.execute("INSERT INTO marcavel (tipo) VALUES (%s) RETURNING id", ('Pet',))
-#idMarcavelPet = cursor.fetchone()[0]
-
-#cursor.execute("INSERT INTO avaliavel (tipo) VALUES (%s) RETURNING id", ('Pet',))
-#idAvaliavelPet = cursor.fetchone()[0]
 
 cursor.execute("""
    INSERT INTO pet (email_dono, nome, especie, data_nasc, id_mongo_pet)
@@ -48,14 +38,11 @@ idPet = cursor.fetchone()[0]
 
 
 # Anúncio de doação
-cursor.execute("INSERT INTO avaliavel (tipo) VALUES (%s) RETURNING id", ('Anuncio',))
-idAvaliavelAnuncio = cursor.fetchone()[0]
-
 cursor.execute("""
-   INSERT INTO anuncio (id_pet, momento, tipo, data_inicio, data_termino, id_avaliavel)
-   VALUES (%s, %s, %s, %s, %s, %s) RETURNING id
+   INSERT INTO anuncio (id_pet, momento, tipo, data_inicio, data_termino)
+   VALUES (%s, %s, %s, %s, %s) RETURNING id
 """, (idPet, datetime.datetime.now(), 'Doacao', datetime.datetime.now(),
-      datetime.datetime.now() + datetime.timedelta(days=10), idAvaliavelAnuncio))
+      datetime.datetime.now() + datetime.timedelta(days=10)))
 idAnuncio = cursor.fetchone()[0]
 
 
@@ -75,11 +62,6 @@ cursor.execute("""
 # CANDIDATO 1 -----------------------------------------------------------------------------------------
 
 # Candidato
-#cursor.execute("INSERT INTO marcavel (tipo) VALUES (%s) RETURNING id", ('Usuario',))
-#idMarcavelCandidato = cursor.fetchone()[0]
-
-#cursor.execute("INSERT INTO avaliavel (tipo) VALUES (%s) RETURNING id", ('Usuario',))
-#idAvaliavelCandidato = cursor.fetchone()[0]
 
 emailCandidato = 'candidato1@mac0439.com'
 
@@ -132,11 +114,6 @@ cursor.execute("""
 # CANDIDATO 2 -----------------------------------------------------------------------------------------
 
 # Candidato
-#cursor.execute("INSERT INTO marcavel (tipo) VALUES (%s) RETURNING id", ('Usuario',))
-#idMarcavelCandidato = cursor.fetchone()[0]
-
-#cursor.execute("INSERT INTO avaliavel (tipo) VALUES (%s) RETURNING id", ('Usuario',))
-#idAvaliavelCandidato = cursor.fetchone()[0]
 
 emailCandidato = 'candidato2@mac0439.com'
 
