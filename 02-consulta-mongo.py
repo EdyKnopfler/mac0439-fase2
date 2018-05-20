@@ -3,7 +3,7 @@ import datetime
 import pprint
 import psycopg2
 
-opcoes = "dbname='camilanaomi' user='camilanaomi' host='linux.ime.usp.br' password='zeruda0' port='5432'" #Altere essa linha! - Para alterar o DB que sera acessado
+opcoes = "dbname='' user='' host='linux.ime.usp.br' password='' port='5432'" #Altere essa linha! - Para alterar o DB que sera acessado
 conexao = psycopg2.connect(opcoes)
 cursor = conexao.cursor()
 cursor.execute("SET search_path TO mac0439") #Altere essa linha - Para mudar o Schema utilizado
