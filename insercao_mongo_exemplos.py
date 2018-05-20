@@ -1,13 +1,8 @@
-import pymongo
 import datetime
 import pprint
 from bson.objectid import ObjectId
 
-from pymongo import MongoClient
-client = MongoClient()
-client = MongoClient('localhost', 27017) #Altere essa linha - Caso você não estiver usando a porta do Mongo Default
-db = client['mac0439']
-sitedb = db.eAdopt
+from conexao import sitedb
 
 def insertMongoPet(nomePet):
     if nomePet == "John":

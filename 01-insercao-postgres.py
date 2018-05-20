@@ -1,9 +1,7 @@
-import psycopg2, datetime, insercao_mongo_exemplos
+import datetime
 
-opcoes = "dbname='' user='' host='linux.ime.usp.br' password='' port='5432'" #Altere essa linha! - Para alterar o DB que sera acessado
-conexao = psycopg2.connect(opcoes)
-cursor = conexao.cursor()
-cursor.execute("SET search_path TO mac0439") #Altere essa linha - Para mudar o Schema utilizado
+import insercao_mongo_exemplos
+from conexao import conexao, cursor
 
 # DOADOR -----------------------------------------------------------------------------------------
 
@@ -43,18 +41,18 @@ cursor.execute("""
    VALUES (%s, %s, %s, %s, %s) RETURNING id
 """, (idPetDoacao, datetime.datetime.now(), 'Doacao', datetime.datetime.now(),
       datetime.datetime.now() + datetime.timedelta(days=10)))
-idAnuncio = cursor.fetchone()[0]
+idAnuncioDoacao = cursor.fetchone()[0]
 
 # Requisitos doação
 cursor.execute("""
    INSERT INTO requisito (id_anuncio, titulo, id_mongo_requisito, tipo)
    VALUES (%s, %s, %s, %s)
-""", (idAnuncio, 'Janelas teladas', insercao_mongo_exemplos.insertMongoRequisito("Janelas"), 'Obrigatorio'))
+""", (idAnuncioDoacao, 'Janelas teladas', insercao_mongo_exemplos.insertMongoRequisito("Janelas"), 'Obrigatorio'))
 
 cursor.execute("""
    INSERT INTO requisito (id_anuncio, titulo, id_mongo_requisito, tipo, peso)
    VALUES (%s, %s, %s, %s, %s)
-""", (idAnuncio, 'Alpiste francês',insercao_mongo_exemplos.insertMongoRequisito("Alpiste"), 'Opcional', 1))
+""", (idAnuncioDoacao, 'Alpiste francês',insercao_mongo_exemplos.insertMongoRequisito("Alpiste"), 'Opcional', 1))
 
 # Anúncio de cruzamento do John
 cursor.execute("""
@@ -62,18 +60,18 @@ cursor.execute("""
    VALUES (%s, %s, %s, %s, %s) RETURNING id
 """, (idPetCruzamento, datetime.datetime.now(), 'Breeding', datetime.datetime.now(),
       datetime.datetime.now() + datetime.timedelta(days=10)))
-idAnuncio = cursor.fetchone()[0]
+idAnuncioCruzamento = cursor.fetchone()[0]
 
 # Requisitos cruzamento
 cursor.execute("""
    INSERT INTO requisito (id_anuncio, titulo, id_mongo_requisito, tipo)
    VALUES (%s, %s, %s, %s)
-""", (idAnuncio, 'Pelo cor preta', insercao_mongo_exemplos.insertMongoRequisito("Pelo"), 'Obrigatorio'))
+""", (idAnuncioCruzamento, 'Pelo cor preta', insercao_mongo_exemplos.insertMongoRequisito("Pelo"), 'Obrigatorio'))
 
 cursor.execute("""
    INSERT INTO requisito (id_anuncio, titulo, id_mongo_requisito, tipo, peso)
    VALUES (%s, %s, %s, %s, %s)
-""", (idAnuncio, 'Raca Golden',insercao_mongo_exemplos.insertMongoRequisito("Raca"), 'Opcional', 1))
+""", (idAnuncioCruzamento, 'Raca Golden',insercao_mongo_exemplos.insertMongoRequisito("Raca"), 'Opcional', 1))
 
 
 # CANDIDATO 1 -----------------------------------------------------------------------------------------
@@ -110,19 +108,19 @@ cursor.execute("""
 cursor.execute("""
    INSERT INTO processo_doacao (id_anuncio, email_candidato, data_inicio, data_termino)
    VALUES (%s, %s, %s, %s)
-""", (idAnuncio, emailCandidato, datetime.datetime.now(),
+""", (idAnuncioDoacao, emailCandidato, datetime.datetime.now(),
       datetime.datetime.now() + datetime.timedelta(days=10)))
 
 # Status dos requisitos
 cursor.execute("""
    INSERT INTO status_requisito_doacao (id_anuncio, titulo, email_candidato, status)
    VALUES (%s, %s, %s, %s)
-""", (idAnuncio, 'Janelas teladas', emailCandidato, 'cumprido'))
+""", (idAnuncioDoacao, 'Janelas teladas', emailCandidato, 'cumprido'))
 
 cursor.execute("""
    INSERT INTO status_requisito_doacao (id_anuncio, titulo, email_candidato, status)
    VALUES (%s, %s, %s, %s)
-""", (idAnuncio, 'Alpiste francês', emailCandidato, 'cumprido'))
+""", (idAnuncioDoacao, 'Alpiste francês', emailCandidato, 'cumprido'))
 
 
 
@@ -159,14 +157,14 @@ cursor.execute("""
 cursor.execute("""
    INSERT INTO processo_doacao (id_anuncio, email_candidato, data_inicio, data_termino)
    VALUES (%s, %s, %s, %s)
-""", (idAnuncio, emailCandidato, datetime.datetime.now(),
+""", (idAnuncioDoacao, emailCandidato, datetime.datetime.now(),
       datetime.datetime.now() + datetime.timedelta(days=10)))
 
 # Status dos requisitos
 cursor.execute("""
    INSERT INTO status_requisito_doacao (id_anuncio, titulo, email_candidato, status)
    VALUES (%s, %s, %s, %s)
-""", (idAnuncio, 'Janelas teladas', emailCandidato, 'cumprido'))
+""", (idAnuncioDoacao, 'Janelas teladas', emailCandidato, 'cumprido'))
 
 # EMPRESA -----------------------------------------------------------------------------------------
 
