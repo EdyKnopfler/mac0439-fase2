@@ -3,13 +3,13 @@ import datetime
 import pprint
 from bson.objectid import ObjectId
 
+from pymongo import MongoClient
+client = MongoClient()
+client = MongoClient('localhost', 27017) #Altere essa linha - Caso você não estiver usando a porta do Mongo Default
+db = client['mac0439']
+sitedb = db.eAdopt
 
 def insertMongoPet(nomePet):
-    from pymongo import MongoClient
-    client = MongoClient()
-    client = MongoClient('localhost', 27017) #Altere essa linha - Caso você não estiver usando a porta do Mongo Default
-    db = client['mac0439']
-    sitedb = db.eAdopt
     if nomePet == "John":
         new_pet = {"tipo": "pet",
                      "raca": "Labrador",
@@ -56,4 +56,28 @@ def insertMongoPet(nomePet):
                      "raca": "Unknown"
                     }
     result = sitedb.insert_one(new_pet)
+    return str(result.inserted_id)
+
+def insertMongoRequisito(tituloReq):
+    if tituloReq == "Janelas":
+        new_req = {"tipo": "requisito",
+                   "descricao": "O Loro gosta de voar, se a janela nao tiver tela ele vai fugir"
+                  }
+    elif tituloReq == "Alpiste":
+        new_req = {"tipo": "requisito",
+                   "descricao": "A comida de preferência do Loro é Alpiste Frances, mas se tiver outro não tem problema"
+                  }
+    elif tituloReq == "Pelo":
+        new_req = {"tipo": "requisito",
+                   "descricao": "Preciso de um cachorro preto para cruzar com o meu Golden dourado"
+                  }
+    elif tituloReq == "Raca":
+        new_req = {"tipo": "requisito",
+                   "descricao": "Seria ideal um cachorro da mesma raca que o John, mas desde que eles possam cruzar sem problemas"
+                  }
+    else:
+        new_req = {"tipo": "requisito",
+                   "descricao": "Unknown"
+                   }
+    result = sitedb.insert_one(new_req)
     return str(result.inserted_id)

@@ -5,6 +5,8 @@ conexao = psycopg2.connect(opcoes)
 cursor = conexao.cursor()
 cursor.execute("SET search_path TO mac0439") #Altere essa linha - Para mudar o Schema utilizado
 
+# DOADOR -----------------------------------------------------------------------------------------
+
 # Doador
 
 emailDoador = 'doador@mac0439.com'
@@ -22,41 +24,56 @@ cursor.execute("""
 """, (emailDoador, '00000000000', datetime.date(1990, 10, 10)))
 
 
-# Pet
-
+# Pets do Doador
 cursor.execute("""
    INSERT INTO pet (email_dono, nome, especie, data_nasc, id_mongo_pet)
    VALUES (%s, %s, %s, %s, %s) RETURNING id
 """, (emailDoador, 'Lôro', 'Papagaio', datetime.date(2010, 5, 5), insercao_mongo_exemplos.insertMongoPet("Loro")))
-idPet = cursor.fetchone()[0]
+idPetDoacao = cursor.fetchone()[0]
 
 cursor.execute("""
    INSERT INTO pet (email_dono, nome, especie, data_nasc, id_mongo_pet)
    VALUES (%s, %s, %s, %s, %s) RETURNING id
 """, (emailDoador, 'John', 'Cachorro', datetime.date(2012, 10, 6), insercao_mongo_exemplos.insertMongoPet("John")))
-idPet = cursor.fetchone()[0]
+idPetCruzamento = cursor.fetchone()[0]
 
-
-# Anúncio de doação
+# Anúncio de doação do Lôro
 cursor.execute("""
    INSERT INTO anuncio (id_pet, momento, tipo, data_inicio, data_termino)
    VALUES (%s, %s, %s, %s, %s) RETURNING id
-""", (idPet, datetime.datetime.now(), 'Doacao', datetime.datetime.now(),
+""", (idPetDoacao, datetime.datetime.now(), 'Doacao', datetime.datetime.now(),
       datetime.datetime.now() + datetime.timedelta(days=10)))
 idAnuncio = cursor.fetchone()[0]
 
-
-# Requisitos
+# Requisitos doação
 cursor.execute("""
-   INSERT INTO requisito (id_anuncio, titulo, tipo)
-   VALUES (%s, %s, %s)
-""", (idAnuncio, 'Janelas teladas', 'Obrigatorio'))
-
-cursor.execute("""
-   INSERT INTO requisito (id_anuncio, titulo, tipo, peso)
+   INSERT INTO requisito (id_anuncio, titulo, id_mongo_requisito, tipo)
    VALUES (%s, %s, %s, %s)
-""", (idAnuncio, 'Alpiste francês', 'Opcional', 1))
+""", (idAnuncio, 'Janelas teladas', insercao_mongo_exemplos.insertMongoRequisito("Janelas"), 'Obrigatorio'))
 
+cursor.execute("""
+   INSERT INTO requisito (id_anuncio, titulo, id_mongo_requisito, tipo, peso)
+   VALUES (%s, %s, %s, %s, %s)
+""", (idAnuncio, 'Alpiste francês',insercao_mongo_exemplos.insertMongoRequisito("Alpiste"), 'Opcional', 1))
+
+# Anúncio de cruzamento do John
+cursor.execute("""
+   INSERT INTO anuncio (id_pet, momento, tipo, data_inicio, data_termino)
+   VALUES (%s, %s, %s, %s, %s) RETURNING id
+""", (idPetCruzamento, datetime.datetime.now(), 'Breeding', datetime.datetime.now(),
+      datetime.datetime.now() + datetime.timedelta(days=10)))
+idAnuncio = cursor.fetchone()[0]
+
+# Requisitos cruzamento
+cursor.execute("""
+   INSERT INTO requisito (id_anuncio, titulo, id_mongo_requisito, tipo)
+   VALUES (%s, %s, %s, %s)
+""", (idAnuncio, 'Pelo cor preta', insercao_mongo_exemplos.insertMongoRequisito("Pelo"), 'Obrigatorio'))
+
+cursor.execute("""
+   INSERT INTO requisito (id_anuncio, titulo, id_mongo_requisito, tipo, peso)
+   VALUES (%s, %s, %s, %s, %s)
+""", (idAnuncio, 'Raca Golden',insercao_mongo_exemplos.insertMongoRequisito("Raca"), 'Opcional', 1))
 
 
 # CANDIDATO 1 -----------------------------------------------------------------------------------------
@@ -82,13 +99,11 @@ cursor.execute("""
    INSERT INTO pet (email_dono, nome, especie, data_nasc, id_mongo_pet)
    VALUES (%s, %s, %s, %s, %s) RETURNING id
 """, (emailCandidato, 'Luke', 'Gato', datetime.date(2013, 11, 20), insercao_mongo_exemplos.insertMongoPet("Luke")))
-idPet = cursor.fetchone()[0]
 
 cursor.execute("""
    INSERT INTO pet (email_dono, nome, especie, data_nasc, id_mongo_pet)
    VALUES (%s, %s, %s, %s, %s) RETURNING id
 """, (emailCandidato, 'Ol', 'Cachorro', datetime.date(2013, 11, 20), insercao_mongo_exemplos.insertMongoPet("Ol")))
-idPet = cursor.fetchone()[0]
 
 
 # Processo de doação
@@ -134,13 +149,11 @@ cursor.execute("""
    INSERT INTO pet (email_dono, nome, especie, data_nasc, id_mongo_pet)
    VALUES (%s, %s, %s, %s, %s) RETURNING id
 """, (emailCandidato, 'Azuril', 'Peixe', datetime.date(2017, 1, 30), insercao_mongo_exemplos.insertMongoPet("Azuril")))
-idPet = cursor.fetchone()[0]
 
 cursor.execute("""
    INSERT INTO pet (email_dono, nome, especie, data_nasc, id_mongo_pet)
    VALUES (%s, %s, %s, %s, %s) RETURNING id
 """, (emailCandidato, 'Tana', 'Cobra', datetime.date(2013, 11, 20), insercao_mongo_exemplos.insertMongoPet("Tana")))
-idPet = cursor.fetchone()[0]
 
 
 # Processo de doação
