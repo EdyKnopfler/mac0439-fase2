@@ -1,11 +1,11 @@
 import psycopg2
 
-opcoes = "dbname='mac0439' user='ederson' host='localhost' password='jethrotull' port='5432'"
+opcoes = "dbname='' user='' host='linux.ime.usp.br' password='' port='5432'" #Altere essa linha - Para alterar o DB que sera acessado
 conexao = psycopg2.connect(opcoes)
 cursor = conexao.cursor()
 
 cursor.execute("""
-   SELECT COUNT(*) 
+   SELECT COUNT(*)
    FROM requisito
    WHERE id_anuncio = 3 AND tipo = 'Obrigatorio'
 """);
@@ -14,11 +14,11 @@ quantidade = cursor.fetchone()[0]
 print("\nO anúncio de doação possui %d requisito(s) obrigatório(s)." % (quantidade,))
 
 cursor.execute("""
-   SELECT 
+   SELECT
       u.nome, COUNT(*)
    FROM
       status_requisito_doacao st
-      JOIN requisito req 
+      JOIN requisito req
          ON st.id_anuncio = req.id_anuncio AND st.titulo = req.titulo
       JOIN usuario u ON st.email_candidato = u.email
    WHERE st.id_anuncio = 3 AND st.status = 'cumprido' AND req.tipo = 'Obrigatorio'
@@ -29,11 +29,11 @@ print("\nQuantidade de requisitos obrigatórios cumpridos:")
 for tupla in cursor:
    print("%s (%d)" % tupla)
 cursor.execute("""
-   SELECT 
+   SELECT
       u.nome, SUM(req.peso)
    FROM
       status_requisito_doacao st
-      JOIN requisito req 
+      JOIN requisito req
          ON st.id_anuncio = req.id_anuncio AND st.titulo = req.titulo
       JOIN usuario u ON st.email_candidato = u.email
    WHERE st.id_anuncio = 3 AND st.status = 'cumprido' AND req.tipo = 'Opcional'
