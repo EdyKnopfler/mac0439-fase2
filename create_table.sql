@@ -127,7 +127,7 @@ create table servico (
 	email_empresa		varchar(50),
 	id_pet				INT,
 	tipo_servico		varchar(50),
-	id_servico_mongo	varchar(24),
+	id_mongo_servico	varchar(24),
 	id_avaliavel		INT NOT NULL,
 	foreign key (email_empresa) references usuario(email) ON DELETE CASCADE ON UPDATE CASCADE,
 	foreign key (id_avaliavel) references avaliavel(id) ON DELETE CASCADE ON UPDATE CASCADE,

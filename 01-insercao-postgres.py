@@ -99,12 +99,12 @@ cursor.execute("""
    INSERT INTO pet (email_dono, nome, especie, data_nasc, id_mongo_pet)
    VALUES (%s, %s, %s, %s, %s) RETURNING id
 """, (emailCandidato, 'Luke', 'Gato', datetime.date(2013, 11, 20), insercao_mongo_exemplos.insertMongoPet("Luke")))
+idPetServico = cursor.fetchone()[0]
 
 cursor.execute("""
    INSERT INTO pet (email_dono, nome, especie, data_nasc, id_mongo_pet)
    VALUES (%s, %s, %s, %s, %s) RETURNING id
 """, (emailCandidato, 'Ol', 'Cachorro', datetime.date(2013, 11, 20), insercao_mongo_exemplos.insertMongoPet("Ol")))
-
 
 # Processo de doação
 cursor.execute("""
@@ -155,7 +155,6 @@ cursor.execute("""
    VALUES (%s, %s, %s, %s, %s) RETURNING id
 """, (emailCandidato, 'Tana', 'Cobra', datetime.date(2013, 11, 20), insercao_mongo_exemplos.insertMongoPet("Tana")))
 
-
 # Processo de doação
 cursor.execute("""
    INSERT INTO processo_doacao (id_anuncio, email_candidato, data_inicio, data_termino)
@@ -168,6 +167,50 @@ cursor.execute("""
    INSERT INTO status_requisito_doacao (id_anuncio, titulo, email_candidato, status)
    VALUES (%s, %s, %s, %s)
 """, (idAnuncio, 'Janelas teladas', emailCandidato, 'cumprido'))
+
+# EMPRESA -----------------------------------------------------------------------------------------
+
+# Empresa
+
+emailEmpresa = 'empresa@mac0439.com'
+
+cursor.execute("""
+   INSERT INTO usuario (email, senha, nome, rua, bairro, cidade, estado, cep, telefone,
+                        lat_long)
+   values (%s, %s, %s, %s, %s, %s, %s, %s, %s, POINT(%s, %s))
+""", (emailEmpresa, '333', 'Empresa', 'Rua da Empresa, 30', 'Liberdade', 'São Paulo', 'SP',
+      '33333333', '3333333', 1, 2))
+
+cursor.execute("""
+   INSERT INTO pessoa_juridica (email, cnpj)
+   VALUES (%s, %s)
+""", (emailEmpresa, '33333333333'))
+
+# Servico que a empresa prestou ao Luke
+cursor.execute("""
+   INSERT INTO servico (email_empresa, id_pet, tipo_servico, id_mongo_servico)
+   values (%s, %s, %s, %s)
+""", (emailEmpresa, idPetServico, 'Tosa', insercao_mongo_exemplos.insertMongoServico("Tosa")))
+
+# Avaliação do Servico do Luke
+cursor.execute("""
+   SELECT id_avaliavel
+   FROM servico
+   WHERE {} = id_pet
+""".format(idPetServico));
+servicoAvaliavelId = cursor.fetchone()[0]
+
+cursor.execute("""
+   SELECT email
+   FROM usuario, pet
+   WHERE {} = id and email = email_dono
+""".format(idPetServico));
+emailAvaliador = cursor.fetchone()[0]
+
+cursor.execute("""
+   INSERT INTO avaliacao (email_avaliador, id_avaliavel, nota, id_mongo_avaliacao)
+   values (%s, %s, %s, %s)
+""", (emailAvaliador, servicoAvaliavelId, 8, insercao_mongo_exemplos.insertMongoAvaliacao("Tosa")))
 
 conexao.commit()
 cursor.close()

@@ -81,3 +81,27 @@ def insertMongoRequisito(tituloReq):
                    }
     result = sitedb.insert_one(new_req)
     return str(result.inserted_id)
+
+def insertMongoServico(tipoServ):
+    if tipoServ == "Tosa":
+        new_serv = {"tipo": "servico",
+                   "descricao": "Uma tosa simples para o meu Labrador"
+                  }
+    else:
+        new_serv = {"tipo": "servico",
+                   "descricao": "Unknown"
+                   }
+    result = sitedb.insert_one(new_serv)
+    return str(result.inserted_id)
+
+def insertMongoAvaliacao(tipoAval):
+    if tipoAval == "Tosa":
+        new_aval = {"tipo": "avaliacao",
+                   "descricao": "A tosa foi bem feita, porem e cara demais"
+                  }
+    else:
+        new_aval = {"tipo": "avaliacao",
+                   "descricao": "Unknown"
+                   }
+    result = sitedb.insert_one(new_aval)
+    return str(result.inserted_id)
